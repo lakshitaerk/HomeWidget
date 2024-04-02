@@ -1,0 +1,39 @@
+pluginManagement {
+    def flutterSdkPath = {
+        def properties = new Properties()
+        file("local.properties").withInputStream { properties.load(it) }
+        def flutterSdkPath = properties.getProperty("flutter.sdk")
+        assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
+        return flutterSdkPath
+    }
+    settings.ext.flutterSdkPath = flutterSdkPath()
+
+    includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        // Mapbox Maven repository
+//        maven {
+//            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
+//            // Do not change the username below. It should always be "mapbox" (not your username).
+//            credentials.username = "mapbox"
+//            // Use the secret token stored in gradle.properties as the password
+//            credentials.password = providers.gradleProperty("MAPBOX_DOWNLOADS_TOKEN").get()
+//            authentication { basic(BasicAuthentication) }
+//        }
+
+    }
+
+    plugins {
+        id "dev.flutter.flutter-gradle-plugin" version "1.0.0" apply false
+    }
+}
+
+plugins {
+    id "dev.flutter.flutter-plugin-loader" version "1.0.0"
+    id "com.android.application" version "7.3.0" apply false
+}
+
+include ":app"
